@@ -25,9 +25,9 @@ data/universe/*.csv
 !data/signals/.gitkeep
 
 # ML artifacts
-models/
+# models/
 !models/.gitkeep
-experiments/
+# experiments/
 !experiments/.gitkeep
 mlruns/
 mlflow.db
