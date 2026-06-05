@@ -1,4 +1,3 @@
-# quant-ai-platform
 # Quantitative AI Research Platform
 
 > A production-grade, institutional-style quantitative research environment for financial machine learning, alpha signal discovery, strategy simulation, portfolio optimization, and performance analytics.
