@@ -344,6 +344,19 @@ class YFinanceConnector:
         ]
 
         normalized_df = normalized_df[selected_columns]
+
+        # Drop incomplete rows (e.g. unclosed market sessions where close is null)
+        required_ohlc = ["open", "high", "low", "close"]
+        null_mask = normalized_df[required_ohlc].isna().any(axis=1)
+        if null_mask.any():
+            dropped_count = int(null_mask.sum())
+            logger.warning(
+                "Dropping %s incomplete rows with null OHLC values for symbol=%s",
+                dropped_count,
+                request.symbol,
+            )
+            normalized_df = normalized_df[~null_mask]
+
         normalized_df = normalized_df.sort_values(["symbol", "date"])
         normalized_df = normalized_df.reset_index(drop=True)
 

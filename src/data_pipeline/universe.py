@@ -67,7 +67,19 @@ def get_nse_equity_universe(
             "Download it from NSE website and place it at data/universe/nifty500.csv"
         )
 
-    df = pd.read_csv(_NIFTY500_CSV_PATH)
+    # Support multiple encodings in case CSV was saved/exported in UTF-16 or with BOM on Windows
+    df = None
+    for encoding in ("utf-8", "utf-8-sig", "utf-16", "latin-1"):
+        try:
+            df = pd.read_csv(_NIFTY500_CSV_PATH, encoding=encoding)
+            break
+        except UnicodeDecodeError:
+            continue
+
+    if df is None:
+        raise ValueError(
+            f"Could not decode NIFTY 500 universe file at {_NIFTY500_CSV_PATH}"
+        )
 
     required_columns = {"Symbol", "Industry"}
     missing = required_columns - set(df.columns)
