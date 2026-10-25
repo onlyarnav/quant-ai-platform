@@ -70,6 +70,35 @@ class Settings(BaseSettings):
 
     # ── MLflow ────────────────────────────────────────────────
     MLFLOW_TRACKING_URI: str = Field(default="http://localhost:5000")
+    MLFLOW_EXPERIMENT_NAME: str = Field(default="quant-ai-platform")
+    FEATURES_DIR: Path = _PROJECT_ROOT / "data" / "features"
+    PREDICTIONS_DIR: Path = _PROJECT_ROOT / "data" / "predictions"
+    SIGNALS_DIR: Path = _PROJECT_ROOT / "data" / "signals"
+    MODEL_ARTIFACT_DIR: Path = _PROJECT_ROOT / "models" / "artifacts"
+    DEFAULT_TARGET_COLUMN: str = Field(default="future_return_1d")
+    ML_FEATURE_POLICY: str = Field(default="scale_free")
+    SCALE_FREE_FEATURE_COLUMNS: list[str] = Field(default_factory=lambda: [
+        "rsi_14", "roc_5", "roc_10", "volatility_10", "volatility_20",
+        "volatility_50", "bollinger_width", "zscore_20", "distance_from_sma",
+        "distance_from_ema", "volume_ratio",
+    ])
+    TRAIN_RATIO: float = Field(default=0.70)
+    VALIDATION_RATIO: float = Field(default=0.15)
+    TEST_RATIO: float = Field(default=0.15)
+    WALK_FORWARD_INITIAL_TRAIN_SIZE: int = Field(default=252)
+    WALK_FORWARD_TEST_SIZE: int = Field(default=21)
+    WALK_FORWARD_STEP_SIZE: int = Field(default=21)
+    RANDOM_SEED: int = Field(default=42)
+    RETRAIN_INTERVAL_DAYS: int = Field(default=7)
+    SIGNAL_THRESHOLD: float = Field(default=0.01)
+    TOP_N: int = Field(default=10)
+    LINEAR_REGRESSION_PARAMS: dict = Field(default_factory=dict)
+    RIDGE_PARAMS: dict = Field(default_factory=lambda: {"alpha": 1.0})
+    LASSO_PARAMS: dict = Field(default_factory=lambda: {"alpha": 0.001, "max_iter": 10000})
+    RANDOM_FOREST_PARAMS: dict = Field(default_factory=lambda: {"n_estimators": 200, "min_samples_leaf": 2})
+    GRADIENT_BOOSTING_PARAMS: dict = Field(default_factory=lambda: {"n_estimators": 100, "learning_rate": 0.05, "max_depth": 2})
+    XGBOOST_PARAMS: dict = Field(default_factory=lambda: {"n_estimators": 200, "max_depth": 3, "learning_rate": 0.05})
+    LIGHTGBM_PARAMS: dict = Field(default_factory=lambda: {"n_estimators": 200, "num_leaves": 15, "learning_rate": 0.05})
 
     # ── Validators ────────────────────────────────────────────
     @field_validator("DATA_UPDATE_MODE")
